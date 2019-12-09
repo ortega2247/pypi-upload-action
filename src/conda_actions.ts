@@ -29,5 +29,5 @@ const upload_to_pypi = async(config: ConfigObject): Promise<void> => {
     const repositoryUrl = config.repository_url
     const packagesDir = config.packages_dir
     await exec.exec('python', ['-m', 'twine', 'upload', '-u', user, '-p', password,
-        '--respository_url', repositoryUrl, `${packagesDir}\*`])
+        '--repository_url', repositoryUrl, `${packagesDir}\*`])
 }
