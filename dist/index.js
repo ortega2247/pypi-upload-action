@@ -1582,7 +1582,7 @@ const upload_to_pypi = (config) => __awaiter(void 0, void 0, void 0, function* (
     const repositoryUrl = config.repository_url;
     const packagesDir = config.packages_dir;
     yield exec.exec('python', ['-m', 'twine', 'upload', '-u', user, '-p', password,
-        '--repository_url', repositoryUrl, `${packagesDir}/*`]);
+        '--repository-url', repositoryUrl, `${packagesDir}/*`]);
 });
 
 
