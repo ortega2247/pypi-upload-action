@@ -1,16 +1,11 @@
 import * as core from '@actions/core'
-import {wait} from './wait'
+import { loadConfig } from './load_config'
+import { pypi_upload } from './conda_actions'
 
 async function run(): Promise<void> {
   try {
-    const ms: string = core.getInput('milliseconds')
-    core.debug(`Waiting ${ms} milliseconds ...`)
-
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
-
-    core.setOutput('time', new Date().toTimeString())
+    const config = loadConfig()
+    await pypi_upload(config)
   } catch (error) {
     core.setFailed(error.message)
   }
