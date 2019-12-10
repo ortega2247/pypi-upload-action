@@ -1,10 +1,27 @@
+/*
+ * Copyright (C) 2019 Sebastian Weigand
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Modifications copyright (C) 2019 Oscar Ortega
+ */
 import * as core from '@actions/core'
 
 export interface ConfigObject {
   user: string
   password: string
-  repository_url: string
-  packages_dir: string
+  repositoryUrl: string
+  packagesDir: string
 }
 
 /**
@@ -13,12 +30,12 @@ export interface ConfigObject {
 export const loadConfig = (): ConfigObject => {
   const user = core.getInput('user')
   const password = core.getInput('password')
-  const repository_url = core.getInput('repository_url')
-  const packages_dir = core.getInput('packages_dir')
+  const repositoryUrl = core.getInput('repository_url')
+  const packagesDir = core.getInput('packages_dir')
   return {
     user,
     password,
-    repository_url,
-    packages_dir,
+    repositoryUrl,
+    packagesDir
   }
 }

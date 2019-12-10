@@ -1,27 +1,48 @@
-import {wait} from '../src/wait'
-import * as process from 'process'
-import * as cp from 'child_process'
-import * as path from 'path'
+/*
+ * Copyright (C) 2019 Sebastian Weigand
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Modifications copyright (C) 2019 Oscar Ortega
+ */
+import { loadConfig } from '../src/load_config'
+import * as core from '@actions/core'
 
-test('throws invalid number', async () => {
-  const input = parseInt('foo', 10)
-  await expect(wait(input)).rejects.toThrow('milliseconds not a number')
-})
+const testEnvVars = {
+  'INPUT_USER': '__token__',
+  'INPUT_PASSWORD': 'abcdefg',
+  'INPUT_REPOSITORY_URL': 'https://test.pypi.org/legacy/',
+  'INPUT_PACKAGES_DIR': 'dist'
+}
 
-test('wait 500 ms', async () => {
-  const start = new Date()
-  await wait(500)
-  const end = new Date()
-  var delta = Math.abs(end.getTime() - start.getTime())
-  expect(delta).toBeGreaterThan(450)
-})
+describe('Reading of the config', () => {
+  beforeEach(() => {
+    for (const key in testEnvVars) {
+      process.env[key] = testEnvVars[key as keyof typeof testEnvVars]
+    }
 
-// shows how the runner will run a javascript action with env / stdout protocol
-test('test runs', () => {
-  process.env['INPUT_MILLISECONDS'] = '500'
-  const ip = path.join(__dirname, '..', 'lib', 'main.js')
-  const options: cp.ExecSyncOptions = {
-    env: process.env
-  }
-  console.log(cp.execSync(`node ${ip}`, options).toString())
+    process.stdout.write = jest.fn()
+  })
+
+  afterEach(() => {
+    for (const key in testEnvVars) Reflect.deleteProperty(testEnvVars, key)
+  })
+
+  it('test config values', () => {
+    const config = loadConfig()
+    expect(config.user).toEqual('__token__')
+    expect(config.password).toEqual('abcdefg')
+    expect(config.repositoryUrl).toEqual('https://test.pypi.org/legacy/')
+    expect(config.packagesDir).toEqual('dist')
+  })
 })

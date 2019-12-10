@@ -947,6 +947,23 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+/*
+ * Copyright (C) 2019 Sebastian Weigand
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Modifications copyright (C) 2019 Oscar Ortega
+ */
 const core = __importStar(__webpack_require__(470));
 /**
  * Read the values of the inputs and operating system.
@@ -954,13 +971,13 @@ const core = __importStar(__webpack_require__(470));
 exports.loadConfig = () => {
     const user = core.getInput('user');
     const password = core.getInput('password');
-    const repository_url = core.getInput('repository_url');
-    const packages_dir = core.getInput('packages_dir');
+    const repositoryUrl = core.getInput('repository_url');
+    const packagesDir = core.getInput('packages_dir');
     return {
         user,
         password,
-        repository_url,
-        packages_dir,
+        repositoryUrl,
+        packagesDir
     };
 };
 
@@ -1010,7 +1027,7 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const config = load_config_1.loadConfig();
-            yield conda_actions_1.pypi_upload(config);
+            yield conda_actions_1.pypiUpload(config);
         }
         catch (error) {
             core.setFailed(error.message);
@@ -1556,17 +1573,35 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+/*
+ * Copyright (C) 2019 Sebastian Weigand
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Modifications copyright (C) 2019 Oscar Ortega
+ */
 const exec = __importStar(__webpack_require__(986));
 /**
  * Uploads package to PyPi.
  *
  * @param config Configuration of the action
  */
-exports.pypi_upload = (config) => __awaiter(void 0, void 0, void 0, function* () {
-    yield install_twine();
-    yield upload_to_pypi(config);
+exports.pypiUpload = (config) => __awaiter(void 0, void 0, void 0, function* () {
+    yield installTwine();
+    yield uploadToPypi(config);
 });
-const install_twine = () => __awaiter(void 0, void 0, void 0, function* () {
+const installTwine = () => __awaiter(void 0, void 0, void 0, function* () {
+    // eslint-disable-next-line no-console
     console.log('Installing twine');
     yield exec.exec('python', ['-m', 'pip', 'install', 'twine']);
 });
@@ -1575,14 +1610,25 @@ const install_twine = () => __awaiter(void 0, void 0, void 0, function* () {
  *
  * @param config Configuration of the action
  */
-const upload_to_pypi = (config) => __awaiter(void 0, void 0, void 0, function* () {
+const uploadToPypi = (config) => __awaiter(void 0, void 0, void 0, function* () {
+    // eslint-disable-next-line no-console
     console.log('Uploading to PyPi');
     const user = config.user;
     const password = config.password;
-    const repositoryUrl = config.repository_url;
-    const packagesDir = config.packages_dir;
-    yield exec.exec('python', ['-m', 'twine', 'upload', '-u', user, '-p', password,
-        '--repository-url', repositoryUrl, `${packagesDir}/*`]);
+    const repositoryUrl = config.repositoryUrl;
+    const packagesDir = config.packagesDir;
+    yield exec.exec('python', [
+        '-m',
+        'twine',
+        'upload',
+        '-u',
+        user,
+        '-p',
+        password,
+        '--repository-url',
+        repositoryUrl,
+        `${packagesDir}/*`
+    ]);
 });
 
 
