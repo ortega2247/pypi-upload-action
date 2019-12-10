@@ -2,6 +2,9 @@
 This action uploads [python distribution packages](https://packaging.python.org/tutorials/packaging-projects/)
 located in the `dist/` directory to PyPI.
 
+This action assumes that a [python environment is set up](https://github.com/marketplace/actions/setup-python-environment).
+Python can be set up with [conda](https://github.com/s-weigand/setup-conda) as well
+
 ## Usage
 Upload packages to PyPI
 ```yml
