@@ -47,6 +47,7 @@ const uploadToPypi = async (config: ConfigObject): Promise<void> => {
   const password = config.password
   const repositoryUrl = config.repositoryUrl
   const packagesDir = config.packagesDir
+  const packageFile = config.packageFile || '*'
   await exec.exec('python', [
     '-m',
     'twine',
@@ -57,6 +58,6 @@ const uploadToPypi = async (config: ConfigObject): Promise<void> => {
     password,
     '--repository-url',
     repositoryUrl,
-    `${packagesDir}/*`
+    `${packagesDir}/${packageFile}`
   ])
 }

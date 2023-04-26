@@ -22,6 +22,7 @@ export interface ConfigObject {
   password: string
   repositoryUrl: string
   packagesDir: string
+  packageFile: string
 }
 
 /**
@@ -32,10 +33,12 @@ export const loadConfig = (): ConfigObject => {
   const password = core.getInput('password')
   const repositoryUrl = core.getInput('repository_url')
   const packagesDir = core.getInput('packages_dir')
+  const packageFile = core.getInput('package_file')
   return {
     user,
     password,
     repositoryUrl,
-    packagesDir
+    packagesDir,
+    packageFile
   }
 }
